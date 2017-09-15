@@ -149,20 +149,6 @@ def main(_):
             # 输入训练数据 并 更新网络
             xs, ys = reader.gen_cbow_data(line)
             feed_dict = {model.xs: xs, model.ys: ys}
-            ## 打印 窗口向量 和 目标向量
-            #x_emb, concat_emb, context_emb, y_emb = sess.run(
-            #    [model.embed, model.concat_emb, model.context_emb, model.ys], 
-            #    feed_dict=feed_dict)
-            #print("x_emb.shape = ", x_emb.shape)
-            #print(x_emb)
-            #print("concat_emb.shape = ", concat_emb.shape)
-            #print(concat_emb)
-            #print("context_emb.shape = ", context_emb.shape)
-            #print(context_emb)
-            #print("y_emb.shape = ", y_emb.shape)
-            #print(y_emb)
-            #return 0
-
             _, loss = sess.run([model.optimizer, model.loss], feed_dict=feed_dict)
             average_loss += loss
 
