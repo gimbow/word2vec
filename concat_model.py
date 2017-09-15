@@ -133,7 +133,9 @@ def main(_):
         FLAGS.context_window, FLAGS.num_sampled, FLAGS.model_path, valid_examples)
 
     # session 和 初始化
-    sess = tf.Session()
+    sess_config = tf.ConfigProto()
+    sess_config.gpu_options.allow_growth = True
+    sess = tf.Session(config=sess_config)
     merged = tf.summary.merge_all()
     writer = tf.summary.FileWriter(FLAGS.log_path, sess.graph)
     init = tf.global_variables_initializer()
@@ -162,9 +164,9 @@ def main(_):
                 writer.add_summary(train_result, step)
 
             # 调试验证集的邻近词
-            if step % (FLAGS.step_size * 10) == 0:
+            if step % (FLAGS.step_size * 20) == 0:
                 sim = model.similarity.eval(session=sess)
-                for i in xrange(FLAGS.valid_size):
+                for i in xrange(len(valid_examples)):
                     valid_word = reader.reverse_lookup(valid_examples[i])
                     top_k = 8
                     nearest = (-sim[i,:]).argsort()[1: top_k + 1]
